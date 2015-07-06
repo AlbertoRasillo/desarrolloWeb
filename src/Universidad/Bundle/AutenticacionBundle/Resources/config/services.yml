@@ -1,4 +1,0 @@
-services:
-#    universidad_autenticacion.example:
-#        class: Universidad\Bundle\AutenticacionBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
