@@ -1,0 +1,3 @@
+universidad_autenticacion_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: UniversidadAutenticacionBundle:Default:index }
