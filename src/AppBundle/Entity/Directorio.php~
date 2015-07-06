@@ -1,0 +1,63 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Directorio
+ *
+ * @ORM\Table(name="Directorio", indexes={@ORM\Index(name="fk_Directorio_Directorio1_idx", columns={"parentId"})})
+ * @ORM\Entity
+ */
+class Directorio
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=45, nullable=true)
+     */
+    private $nombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=45, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @var \AppBundle\Entity\Directorio
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Directorio")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="parentId", referencedColumnName="id")
+     * })
+     */
+    private $parentid;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Espacioalmacenamiento", mappedBy="iddirectorio")
+     */
+    private $idespacioalmacenamientohasdirectorio;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->idespacioalmacenamientohasdirectorio = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}

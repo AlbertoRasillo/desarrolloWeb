@@ -127,14 +127,96 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // universidad_autenticacion_homepage
-        if (0 === strpos($pathinfo, '/hello') && preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'universidad_autenticacion_homepage')), array (  '_controller' => 'Universidad\\Bundle\\AutenticacionBundle\\Controller\\DefaultController::indexAction',));
-        }
+        if (0 === strpos($pathinfo, '/a')) {
+            if (0 === strpos($pathinfo, '/archivo')) {
+                // archivo
+                if (rtrim($pathinfo, '/') === '/archivo') {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_archivo;
+                    }
 
-        // homepage
-        if ($pathinfo === '/app/example') {
-            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
+                    if (substr($pathinfo, -1) !== '/') {
+                        return $this->redirect($pathinfo.'/', 'archivo');
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::indexAction',  '_route' => 'archivo',);
+                }
+                not_archivo:
+
+                // archivo_create
+                if ($pathinfo === '/archivo/') {
+                    if ($this->context->getMethod() != 'POST') {
+                        $allow[] = 'POST';
+                        goto not_archivo_create;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::createAction',  '_route' => 'archivo_create',);
+                }
+                not_archivo_create:
+
+                // archivo_new
+                if ($pathinfo === '/archivo/new') {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_archivo_new;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::newAction',  '_route' => 'archivo_new',);
+                }
+                not_archivo_new:
+
+                // archivo_show
+                if (preg_match('#^/archivo/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_archivo_show;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_show')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::showAction',));
+                }
+                not_archivo_show:
+
+                // archivo_edit
+                if (preg_match('#^/archivo/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_archivo_edit;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_edit')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::editAction',));
+                }
+                not_archivo_edit:
+
+                // archivo_update
+                if (preg_match('#^/archivo/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                    if ($this->context->getMethod() != 'PUT') {
+                        $allow[] = 'PUT';
+                        goto not_archivo_update;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_update')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::updateAction',));
+                }
+                not_archivo_update:
+
+                // archivo_delete
+                if (preg_match('#^/archivo/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                    if ($this->context->getMethod() != 'DELETE') {
+                        $allow[] = 'DELETE';
+                        goto not_archivo_delete;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_delete')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::deleteAction',));
+                }
+                not_archivo_delete:
+
+            }
+
+            // homepage
+            if ($pathinfo === '/app/example') {
+                return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
+            }
+
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();

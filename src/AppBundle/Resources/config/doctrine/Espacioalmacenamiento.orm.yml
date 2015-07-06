@@ -1,0 +1,63 @@
+AppBundle\Entity\Espacioalmacenamiento:
+    type: entity
+    table: EspacioAlmacenamiento
+    indexes:
+        fk_EspacioAlmacenamiento_Login_idx:
+            columns:
+                - idLogin
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        nombre:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        raiz:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+        cuota:
+            type: float
+            nullable: true
+            precision: 10
+            scale: 0
+            comment: ''
+    manyToOne:
+        idlogin:
+            targetEntity: Usuario
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                idLogin:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToMany:
+        iddirectorio:
+            targetEntity: Directorio
+            cascade: {  }
+            mappedBy: null
+            inversedBy: idespacioalmacenamientohasdirectorio
+            joinTable:
+                name: espacioalmacenamientohasdirectorio
+                joinColumns:
+                    -
+                        name: idEspacioAlmacenamientoHasDirectorio
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: idDirectorio
+                        referencedColumnName: id
+            orderBy: null
+    lifecycleCallbacks: {  }

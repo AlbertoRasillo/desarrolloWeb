@@ -1,0 +1,78 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Espacioalmacenamiento
+ *
+ * @ORM\Table(name="EspacioAlmacenamiento", indexes={@ORM\Index(name="fk_EspacioAlmacenamiento_Login_idx", columns={"idLogin"})})
+ * @ORM\Entity
+ */
+class Espacioalmacenamiento
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=45, nullable=true)
+     */
+    private $nombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="raiz", type="string", length=45, nullable=true)
+     */
+    private $raiz;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="cuota", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $cuota;
+
+    /**
+     * @var \AppBundle\Entity\Usuario
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Usuario")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idLogin", referencedColumnName="id")
+     * })
+     */
+    private $idlogin;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Directorio", inversedBy="idespacioalmacenamientohasdirectorio")
+     * @ORM\JoinTable(name="espacioalmacenamientohasdirectorio",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="idEspacioAlmacenamientoHasDirectorio", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="idDirectorio", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $iddirectorio;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->iddirectorio = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}
