@@ -219,6 +219,31 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+        if (0 === strpos($pathinfo, '/usuario/login')) {
+            // acceso_login
+            if ($pathinfo === '/usuario/login') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_acceso_login;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::loginAction',  '_route' => 'acceso_login',);
+            }
+            not_acceso_login:
+
+            // dologin
+            if ($pathinfo === '/usuario/login') {
+                if ($this->context->getMethod() != 'POST') {
+                    $allow[] = 'POST';
+                    goto not_dologin;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::dologinAction',  '_route' => 'dologin',);
+            }
+            not_dologin:
+
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

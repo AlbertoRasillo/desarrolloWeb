@@ -29,7 +29,7 @@ class ArchivoController extends Controller
     {
 	
 	$session = $this->get('Session');
-	$us=$session->get('usuario');
+	$us=$session->get('usuario',$user);
 	if($us){
         	$em = $this->getDoctrine()->getManager();
 
