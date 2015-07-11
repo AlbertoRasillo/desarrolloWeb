@@ -14,12 +14,12 @@ use AppBundle\Form\ArchivoType;
  *
  * @Route("/principal")
  */
-class UsuarioController extends Controller
+class PrincipalController extends Controller
 {
     /**
-     * Autentificacion de usuario.
+     * Pagina principal.
      *
-     * @Route("/principal", name="principal")
+     * @Route("/", name="principal")
      * @Method("GET")
      * @Template("AppBundle:Principal:principal.html.twig")
      */
@@ -32,7 +32,14 @@ class UsuarioController extends Controller
     if($us){
             $em = $this->getDoctrine()->getManager();
 
-            $entities = $em->getRepository('AppBundle:Archivo')->findAll();
+            $qb = $em->createQueryBuilder()
+                     ->select('a.nombre', 'd.nombre', 'a.id', 'd.id')
+                     ->from('AppBundle:Directorio', 'd')
+                     ->join('AppBundle:Archivo','a')
+                     ->where('d.id = a.iddirectorio')
+                     ->groupBy('d.id')
+            ;
+            $entities = $qb->getQuery()->getResult();
 
             return array(
                 'entities' => $entities,
@@ -41,28 +48,6 @@ class UsuarioController extends Controller
     else
         return $this->redirect($this->generateUrl('acceso_login'));
     }
-
-    /**
-     * Autentificacion de usuario.
-     *
-     * @Route("/login", name="dologin")
-     * @Method("POST")
-     */
-    public function dologinAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-    	$nombre = $request->request->get("nombre");	// or GET seria $request->query->get()
-    	$password = $request->request->get("password");
-
-    	$user = $em->getRepository('AppBundle:Usuario')->findOneBy(array('nombre'=>$nombre, 'password'=>$password));
-    	if( $user ) {
-    		$session = $this->get('Session');
-    		$session->set('usuario',$user);
-    		return $this->redirect($this->generateUrl('archivo'));
-    	}
-    	else
-    		return $this->redirect($this->generateUrl('acceso_login'));
-        }
 
 
 

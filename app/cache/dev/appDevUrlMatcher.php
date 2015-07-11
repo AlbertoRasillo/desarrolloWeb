@@ -387,6 +387,21 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+        // principal
+        if (rtrim($pathinfo, '/') === '/principal') {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_principal;
+            }
+
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'principal');
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\PrincipalController::indexAction',  '_route' => 'principal',);
+        }
+        not_principal:
+
         if (0 === strpos($pathinfo, '/usuario/login')) {
             // acceso_login
             if ($pathinfo === '/usuario/login') {

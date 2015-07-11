@@ -21,7 +21,7 @@ class UsuarioController extends Controller
      *
      * @Route("/login", name="acceso_login")
      * @Method("GET")
-     * @Template("AppBundle:Archivo:login.html.twig")
+     * @Template("AppBundle:Principal:login.html.twig")
      */
     public function loginAction()
     {
