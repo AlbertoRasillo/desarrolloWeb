@@ -6,29 +6,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use AppBundle\Entity\Usuario;
+use AppBundle\Entity\Archivo;
 use AppBundle\Form\ArchivoType;
 
 /**
- * Archivo controller.
+ * Principal controller.
  *
- * @Route("/usuario")
+ * @Route("/principal")
  */
 class UsuarioController extends Controller
 {
     /**
      * Autentificacion de usuario.
      *
-     * @Route("/login", name="acceso_login")
+     * @Route("/principal", name="principal")
      * @Method("GET")
-     * @Template("AppBundle:Archivo:login.html.twig")
+     * @Template("AppBundle:Principal:principal.html.twig")
      */
-    public function loginAction()
-    {
-        $em = $this->getDoctrine()->getManager();
 
-        return array(
-        );
+    public function indexAction()
+    {
+    
+    $session = $this->get('Session');
+    $us=$session->get('usuario');
+    if($us){
+            $em = $this->getDoctrine()->getManager();
+
+            $entities = $em->getRepository('AppBundle:Archivo')->findAll();
+
+            return array(
+                'entities' => $entities,
+            );
+    }
+    else
+        return $this->redirect($this->generateUrl('acceso_login'));
     }
 
     /**

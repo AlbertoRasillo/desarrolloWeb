@@ -172,4 +172,9 @@ class Directorio
     {
         return $this->idespacioalmacenamientohasdirectorio;
     }
+
+    public function __toString()
+    {
+        return strval($this->id);
+    }
 }

@@ -1,0 +1,40 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Espacioalmacenamiento</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ entity.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Raiz</th>
+                <td>{{ entity.raiz }}</td>
+            </tr>
+            <tr>
+                <th>Cuota</th>
+                <td>{{ entity.cuota }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('espacioalmacenamiento') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('espacioalmacenamiento_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
