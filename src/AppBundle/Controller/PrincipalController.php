@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Archivo;
+use AppBundle\Entity\Directorio;
 use AppBundle\Form\ArchivoType;
 
 /**
@@ -48,7 +49,5 @@ class PrincipalController extends Controller
     else
         return $this->redirect($this->generateUrl('acceso_login'));
     }
-
-
 
 }

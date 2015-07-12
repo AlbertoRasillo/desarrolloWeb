@@ -210,6 +210,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 }
                 not_archivo_delete:
 
+                // subir
+                if ($pathinfo === '/archivo/subir_fichero') {
+                    if ($this->context->getMethod() != 'POST') {
+                        $allow[] = 'POST';
+                        goto not_subir;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::uploadAction',  '_route' => 'subir',);
+                }
+                not_subir:
+
             }
 
             // homepage
