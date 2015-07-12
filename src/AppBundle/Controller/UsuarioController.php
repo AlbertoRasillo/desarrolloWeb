@@ -47,12 +47,24 @@ class UsuarioController extends Controller
     	if( $user ) {
     		$session = $this->get('Session');
     		$session->set('usuario',$user);
-    		return $this->redirect($this->generateUrl('archivo'));
+    		return $this->redirect($this->generateUrl('principal'));
     	}
     	else
     		return $this->redirect($this->generateUrl('acceso_login'));
-        }
+    }
 
+    /**
+     * Eliminar sesion de usuario.
+     *
+     * @Route("/salir", name="salir")
+     * 
+     */
+    public function deleteSession()
+    {
+        $session = $this->get('Session');
+        $session->invalidate();
+        return $this->redirect($this->generateUrl('acceso_login'));
+    }
 
 
 }

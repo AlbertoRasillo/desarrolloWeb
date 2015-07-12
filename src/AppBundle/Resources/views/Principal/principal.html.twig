@@ -2,7 +2,7 @@
 {% extends '::base1.html.twig' %}
 
 {% block body -%}
-    <h1>List Archivos y directorios</h1>
+    <h1>Archivos y directorios</h1>
 
     <div id="contenedor">
     <header id="cabecera_pri">
@@ -14,19 +14,21 @@
             <article>
      <table id="tablon">
         <tr>
-            <th>Fecha</th>
-            <th>Nombre Carpeta</th>
-            <th>Descripción</th>
+            <th>Archivo</th>
+            <th>Ruta</th>
+            <th>Opciones</th>
         </tr>
         <form>
 
         </form>
-        <a href="{{ path('archivo_new')}}"><img id="anadir" src="img/anadir.png" alt="add">Añadir</a>
+        <a href="{{ path('archivo_new')}}"><img id="anadir" src="img/anadir.png">Añadir Archivo</a>
+        <a href="{{ path('directorio_new')}}"><img id="anadir" src="img/anadir.png">Añadir Directorio</a>
+        <a href="{{ path('salir')}}" id ="salir">Salir</a>
         {% for entity in entities %}
             <tr>
-                <td>{{ entity.id }}</td>
                 <td>{{ entity.nombre }}</td>
-                <td><a href="{{ path('directorio_edit', { 'id': entity.id }) }}">Editar</a></td>
+                <td>{{ entity.path }}</td>
+                <td><a href="{{ path('archivo_edit', { 'id': entity.id }) }}">Editar</a></td>
             </tr>
         {% endfor %}
 

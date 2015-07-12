@@ -210,17 +210,6 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 }
                 not_archivo_delete:
 
-                // subir
-                if ($pathinfo === '/archivo/subir_fichero') {
-                    if ($this->context->getMethod() != 'POST') {
-                        $allow[] = 'POST';
-                        goto not_subir;
-                    }
-
-                    return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::uploadAction',  '_route' => 'subir',);
-                }
-                not_subir:
-
             }
 
             // homepage
@@ -413,28 +402,36 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
         not_principal:
 
-        if (0 === strpos($pathinfo, '/usuario/login')) {
-            // acceso_login
-            if ($pathinfo === '/usuario/login') {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_acceso_login;
+        if (0 === strpos($pathinfo, '/usuario')) {
+            if (0 === strpos($pathinfo, '/usuario/login')) {
+                // acceso_login
+                if ($pathinfo === '/usuario/login') {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_acceso_login;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::loginAction',  '_route' => 'acceso_login',);
                 }
+                not_acceso_login:
 
-                return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::loginAction',  '_route' => 'acceso_login',);
-            }
-            not_acceso_login:
+                // dologin
+                if ($pathinfo === '/usuario/login') {
+                    if ($this->context->getMethod() != 'POST') {
+                        $allow[] = 'POST';
+                        goto not_dologin;
+                    }
 
-            // dologin
-            if ($pathinfo === '/usuario/login') {
-                if ($this->context->getMethod() != 'POST') {
-                    $allow[] = 'POST';
-                    goto not_dologin;
+                    return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::dologinAction',  '_route' => 'dologin',);
                 }
+                not_dologin:
 
-                return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::dologinAction',  '_route' => 'dologin',);
             }
-            not_dologin:
+
+            // salir
+            if ($pathinfo === '/usuario/salir') {
+                return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::deleteSession',  '_route' => 'salir',);
+            }
 
         }
 

@@ -34,11 +34,10 @@ class PrincipalController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $qb = $em->createQueryBuilder()
-                     ->select('a.nombre', 'd.nombre', 'a.id', 'd.id')
+                     ->select('a.nombre', 'd.path', 'a.id')
                      ->from('AppBundle:Directorio', 'd')
-                     ->join('AppBundle:Archivo','a')
+                     ->Join('AppBundle:Archivo','a')
                      ->where('d.id = a.iddirectorio')
-                     ->groupBy('d.id')
             ;
             $entities = $qb->getQuery()->getResult();
 

@@ -61,7 +61,8 @@ class ArchivoController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('archivo_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('principal'));
+            //return $this->redirect($this->generateUrl('archivo_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -200,8 +201,9 @@ class ArchivoController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-
-            return $this->redirect($this->generateUrl('archivo_edit', array('id' => $id)));
+            
+            return $this->redirect($this->generateUrl('principal'));
+            //return $this->redirect($this->generateUrl('principal', array('id' => $id)));
         }
 
         return array(
@@ -233,7 +235,7 @@ class ArchivoController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('archivo'));
+        return $this->redirect($this->generateUrl('principal'));
     }
 
     /**
@@ -252,33 +254,5 @@ class ArchivoController extends Controller
             ->getForm()
         ;
     }
-
-    /**
-     * Subir fichero
-     * @Route("/subir_fichero", name="subir")
-     * @Method("POST")
-     * @Template("AppBundle:Principal:fichero.html.twig")
-     */
-    public function uploadAction(Request $request)
-    {
-        $document = new Archivo();
-        $form = $this->createFormBuilder($document)
-            ->add('nombre')
-            ->add('file')
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($document);
-            $em->flush();
-
-            return $this->redirectToRoute('principal');
-        }
-
-        return array('form' => $form->createView());
-    }
-
 
 }
