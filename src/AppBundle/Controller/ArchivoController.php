@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -342,6 +343,28 @@ class ArchivoController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * Descarga fichero
+     *
+     * @Route("/descarga/{id}", name="archivo_descarga")
+     * @Method("GET")
+     */
+    public function downloadAction($id)
+    {
+    $request = $this->get('request');
+    $path = $this->get('kernel')->getRootDir(). "/../web/upload_files/";
+    $content = file_get_contents($path.$id);
+
+    $response = new Response();
+
+    //set headers
+    $response->headers->set('Content-Type', 'mime/type');
+    $response->headers->set('Content-Disposition', 'attachment;filename="'.$id);
+
+    $response->setContent($content);
+    return $response;
     }
 
 }

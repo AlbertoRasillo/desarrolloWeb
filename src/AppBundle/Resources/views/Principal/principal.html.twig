@@ -28,7 +28,7 @@
             <tr>
                 <td>{{ entity.nombre }}</td>
                 <td>{{ entity.path }}</td>
-                <td><a href="{{ path('archivo_edit', { 'id': entity.id }) }}">Editar / </a><a href="{{ path('archivo_eliminar', { 'id': entity.id }) }}">Eliminar</a></td>
+                <td><a href="{{ path('archivo_edit', { 'id': entity.id }) }}">Editar / </a><a href="{{ path('archivo_eliminar', { 'id': entity.id }) }}">Eliminar / </a><a href="{{ path('archivo_descarga', { 'id': entity.nombre }) }}">Descargar</a></td>
             </tr>
         {% endfor %}
         {% for entity in entities1 %}

@@ -246,6 +246,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 }
                 not_archivo_delete:
 
+                // archivo_descarga
+                if (0 === strpos($pathinfo, '/archivo/descarga') && preg_match('#^/archivo/descarga/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_archivo_descarga;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_descarga')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::downloadAction',));
+                }
+                not_archivo_descarga:
+
             }
 
             // homepage

@@ -54,7 +54,8 @@ class DirectorioController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('directorio_show', array('id' => $entity->getId())));
+            //return $this->redirect($this->generateUrl('directorio_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('principal'));
         }
 
         return array(
@@ -109,6 +110,7 @@ class DirectorioController extends Controller
      */
     public function showAction($id)
     {
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AppBundle:Directorio')->find($id);
@@ -272,7 +274,7 @@ class DirectorioController extends Controller
      *
      * @Route("/subirdir", name="subir_dir")
      * @Method("GET")
-     * @Template("AppBundle:Archivo:upload.html.twig")
+     * @Template("AppBundle:Directorio:upload.html.twig")
      */
     public function uploadDirecAction()
     {
