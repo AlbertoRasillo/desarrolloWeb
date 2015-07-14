@@ -337,6 +337,39 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
             not_directorio_delete:
 
+            // directorio_eliminar
+            if (0 === strpos($pathinfo, '/directorio/eliminar') && preg_match('#^/directorio/eliminar/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_directorio_eliminar;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'directorio_eliminar')), array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::eliminarDirectorioAction',));
+            }
+            not_directorio_eliminar:
+
+            // subir_dir
+            if ($pathinfo === '/directorio/subirdir') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_subir_dir;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::uploadDirecAction',  '_route' => 'subir_dir',);
+            }
+            not_subir_dir:
+
+            // do_dubir_dir
+            if ($pathinfo === '/directorio/dosubirdir') {
+                if ($this->context->getMethod() != 'POST') {
+                    $allow[] = 'POST';
+                    goto not_do_dubir_dir;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::doSubirDirAction',  '_route' => 'do_dubir_dir',);
+            }
+            not_do_dubir_dir:
+
         }
 
         if (0 === strpos($pathinfo, '/espacioalmacenamiento')) {
@@ -423,20 +456,34 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // principal
-        if (rtrim($pathinfo, '/') === '/principal') {
-            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                $allow = array_merge($allow, array('GET', 'HEAD'));
-                goto not_principal;
-            }
+        if (0 === strpos($pathinfo, '/principal')) {
+            // principal
+            if (preg_match('#^/principal(?:/(?P<id>[^/]++))?$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_principal;
+                }
 
-            if (substr($pathinfo, -1) !== '/') {
-                return $this->redirect($pathinfo.'/', 'principal');
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'principal')), array (  'id' => '',  '_controller' => 'AppBundle\\Controller\\PrincipalController::indexAction',));
             }
+            not_principal:
 
-            return array (  '_controller' => 'AppBundle\\Controller\\PrincipalController::indexAction',  '_route' => 'principal',);
+            // app_principal_index
+            if (rtrim($pathinfo, '/') === '/principal') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_app_principal_index;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'app_principal_index');
+                }
+
+                return array (  'id' => '',  '_controller' => 'AppBundle\\Controller\\PrincipalController::indexAction',  '_route' => 'app_principal_index',);
+            }
+            not_app_principal_index:
+
         }
-        not_principal:
 
         if (0 === strpos($pathinfo, '/usuario')) {
             if (0 === strpos($pathinfo, '/usuario/login')) {

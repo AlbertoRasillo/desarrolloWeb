@@ -27,15 +27,15 @@
         {% for entity in entities %}
             <tr>
                 <td>{{ entity.nombre }}</td>
-                <td>{{ entity.id }}</td>
+                <td>{{ entity.path }}</td>
                 <td><a href="{{ path('archivo_edit', { 'id': entity.id }) }}">Editar / </a><a href="{{ path('archivo_eliminar', { 'id': entity.id }) }}">Eliminar</a></td>
             </tr>
         {% endfor %}
         {% for entity in entities1 %}
             <tr>
-                <td>{{ entity.nombre }}</td>
-                <td>{{ entity.id }}</td>
-                <td><a href="{{ path('directorio_edit', { 'id': entity.id }) }}">Editar</a></td>
+                <td><a href="{{ path('principal', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+                <td>{{ entity.path}}</td>
+                <td><a href="{{ path('directorio_edit', { 'id': entity.id }) }}">Editar / </a><a href="{{ path('directorio_eliminar', { 'id': entity.id }) }}">Eliminar</a></a></td>
             </tr>
         {% endfor %}
             <!--Fila utilizada en el caso de realizar una busqueda
