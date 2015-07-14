@@ -16,11 +16,7 @@ class ArchivoType extends AbstractType
     {
         $builder
             ->add('nombre')
-            ->add('tipo')
-            ->add('hash')
-            ->add('mimetype')
-            ->add('tamano')
-            ->add('iddirectorio')
+            ->add('fichero','file')
         ;
     }
     

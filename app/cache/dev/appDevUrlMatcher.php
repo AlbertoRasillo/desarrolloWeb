@@ -155,6 +155,31 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 }
                 not_archivo_create:
 
+                if (0 === strpos($pathinfo, '/archivo/upload')) {
+                    // upload_file
+                    if ($pathinfo === '/archivo/upload') {
+                        if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                            $allow = array_merge($allow, array('GET', 'HEAD'));
+                            goto not_upload_file;
+                        }
+
+                        return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::uploadAction',  '_route' => 'upload_file',);
+                    }
+                    not_upload_file:
+
+                    // do_upload_file
+                    if ($pathinfo === '/archivo/upload') {
+                        if ($this->context->getMethod() != 'POST') {
+                            $allow[] = 'POST';
+                            goto not_do_upload_file;
+                        }
+
+                        return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::doUploadAction',  '_route' => 'do_upload_file',);
+                    }
+                    not_do_upload_file:
+
+                }
+
                 // archivo_new
                 if ($pathinfo === '/archivo/new') {
                     if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
@@ -165,6 +190,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                     return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::newAction',  '_route' => 'archivo_new',);
                 }
                 not_archivo_new:
+
+                // archivo_eliminar
+                if (0 === strpos($pathinfo, '/archivo/eliminar') && preg_match('#^/archivo/eliminar/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                        $allow = array_merge($allow, array('GET', 'HEAD'));
+                        goto not_archivo_eliminar;
+                    }
+
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_eliminar')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::eliminarArchivoAction',));
+                }
+                not_archivo_eliminar:
 
                 // archivo_show
                 if (preg_match('#^/archivo/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {

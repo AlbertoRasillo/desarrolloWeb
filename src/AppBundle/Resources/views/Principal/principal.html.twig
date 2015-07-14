@@ -21,17 +21,23 @@
         <form>
 
         </form>
-        <a href="{{ path('archivo_new')}}"><img id="anadir" src="img/anadir.png">Añadir Archivo</a>
+        <a href="{{ path('upload_file')}}"><img id="anadir" src="img/anadir.png">Añadir Archivo</a>
         <a href="{{ path('directorio_new')}}"><img id="anadir" src="img/anadir.png">Añadir Directorio</a>
         <a href="{{ path('salir')}}" id ="salir">Salir</a>
         {% for entity in entities %}
             <tr>
                 <td>{{ entity.nombre }}</td>
-                <td>{{ entity.path }}</td>
-                <td><a href="{{ path('archivo_edit', { 'id': entity.id }) }}">Editar</a></td>
+                <td>{{ entity.id }}</td>
+                <td><a href="{{ path('archivo_edit', { 'id': entity.id }) }}">Editar / </a><a href="{{ path('archivo_eliminar', { 'id': entity.id }) }}">Eliminar</a></td>
             </tr>
         {% endfor %}
-
+        {% for entity in entities1 %}
+            <tr>
+                <td>{{ entity.nombre }}</td>
+                <td>{{ entity.id }}</td>
+                <td><a href="{{ path('directorio_edit', { 'id': entity.id }) }}">Editar</a></td>
+            </tr>
+        {% endfor %}
             <!--Fila utilizada en el caso de realizar una busqueda
             <tr>
                 <td></td>
