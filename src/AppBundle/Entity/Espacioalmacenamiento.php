@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Espacioalmacenamiento
@@ -45,35 +46,61 @@ class Espacioalmacenamiento
     /**
      * @var \AppBundle\Entity\Usuario
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Usuario")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idLogin", referencedColumnName="id")
-     * })
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Usuario", inversedBy="espacio")
+     * @ORM\JoinColumn(name="idLogin", referencedColumnName="id")
      */
-    private $idlogin;
+    protected $user;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \AppBundle\Entity\Directorio
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Directorio", inversedBy="idespacioalmacenamientohasdirectorio")
-     * @ORM\JoinTable(name="espacioalmacenamientohasdirectorio",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="idEspacioAlmacenamientoHasDirectorio", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="idDirectorio", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Directorio", mappedBy="espacioalmacenamiento")
      */
-    private $iddirectorio;
+    protected $directorios;
+
+
+    public function __construct() {
+        $this->directorios = new ArrayCollection();
+    }
 
     /**
-     * Constructor
+     * Get directorio
+     *
+     * @return \AppBundle\Entity\Directorio 
      */
-    public function __construct()
+    public function getDirectorios()
     {
-        $this->iddirectorio = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->directorios;
     }
+
+    /**
+     * Set idespacioalmacenmiento
+     *
+     * @param \AppBundle\Entity\Directorio $directorio
+     * @return Espacioalmacenamiento
+     */
+    public function addDirectorio(\AppBundle\Entity\Directorio $directorio)
+    {
+        $this->directorios[] = $directorio;
+
+        return $this;
+    }
+
+
+    /**
+    * Get root
+    *
+    * @return \AppBundle\Entity\Directorio 
+    *
+    */
+    public function getRootDir() {
+        foreach($this->getDirectorios() as $subdir) {
+            if( $subdir->getPath()=='/' )
+                return $subdir;
+        }
+        return null;
+    }
+
 
 
     /**
@@ -156,58 +183,25 @@ class Espacioalmacenamiento
     }
 
     /**
-     * Set idlogin
+     * Set user
      *
-     * @param \AppBundle\Entity\Usuario $idlogin
+     * @param \AppBundle\Entity\Usuario $user
      * @return Espacioalmacenamiento
      */
-    public function setIdlogin(\AppBundle\Entity\Usuario $idlogin = null)
+    public function setUser(\AppBundle\Entity\Usuario $user = null)
     {
-        $this->idlogin = $idlogin;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get idlogin
+     * Get user
      *
      * @return \AppBundle\Entity\Usuario 
      */
-    public function getIdlogin()
+    public function getUser()
     {
-        return $this->idlogin;
-    }
-
-    /**
-     * Add iddirectorio
-     *
-     * @param \AppBundle\Entity\Directorio $iddirectorio
-     * @return Espacioalmacenamiento
-     */
-    public function addIddirectorio(\AppBundle\Entity\Directorio $iddirectorio)
-    {
-        $this->iddirectorio[] = $iddirectorio;
-
-        return $this;
-    }
-
-    /**
-     * Remove iddirectorio
-     *
-     * @param \AppBundle\Entity\Directorio $iddirectorio
-     */
-    public function removeIddirectorio(\AppBundle\Entity\Directorio $iddirectorio)
-    {
-        $this->iddirectorio->removeElement($iddirectorio);
-    }
-
-    /**
-     * Get iddirectorio
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIddirectorio()
-    {
-        return $this->iddirectorio;
+        return $this->user;
     }
 }

@@ -3,11 +3,12 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Directorio
  *
- * @ORM\Table(name="Directorio", indexes={@ORM\Index(name="fk_Directorio_Directorio1_idx", columns={"parentId"})})
+ * @ORM\Table(name="Directorio", indexes={@ORM\Index(name="fk_Directorio_Directorio1_idx", columns={"parentId"}), @ORM\Index(name="fk_Directorio_EspacioAlmacenamiento1_idx", columns={"EspacioAlmacenamiento_id"})})
  * @ORM\Entity
  */
 class Directorio
@@ -38,28 +39,103 @@ class Directorio
     /**
      * @var \AppBundle\Entity\Directorio
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Directorio")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="parentId", referencedColumnName="id")
-     * })
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Directorio", mappedBy="parent")
      */
-    private $parentid;
+    protected $subdirectorios;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \AppBundle\Entity\Archivo
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Espacioalmacenamiento", mappedBy="iddirectorio")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Archivo", mappedBy="directorio")
      */
-    private $idespacioalmacenamientohasdirectorio;
+    protected $archivos;
 
     /**
-     * Constructor
+     * @var \AppBundle\Entity\Directorio
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Directorio", inversedBy="subdirectorios")
+     * @ORM\JoinColumn(name="parentId", referencedColumnName="id")
      */
-    public function __construct()
+    protected $parent;
+
+    /**
+     * @var \AppBundle\Entity\Espacioalmacenamiento
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Espacioalmacenamiento", inversedBy="directorios")
+     * @ORM\JoinColumn(name="EspacioAlmacenamiento_id", referencedColumnName="id")
+     */
+    protected $espacioalmacenamiento;
+
+
+    public function __construct() {
+        $this->subdirectorios = new ArrayCollection();
+        $this->archivos = new ArrayCollection();
+     }
+
+    /**
+     * Set espacioalmacenamiento
+     *
+     * @param \AppBundle\Entity\Espacioalmacenamiento $espacioalmacenamiento
+     * @return Directorio
+     */
+    public function setEspacioalmacenamiento(\AppBundle\Entity\Espacioalmacenamiento $espacioalmacenamiento)
     {
-        $this->idespacioalmacenamientohasdirectorio = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->espacioalmacenamiento = $espacioalmacenamiento;
+
+        return $this;
     }
 
+    /**
+     * Get espacioalmacenamiento
+     *
+     * @return \AppBundle\Entity\Espacioalmacenamiento 
+     */
+    public function getEspacioalmacenamiento()
+    {
+        return $this->espacioalmacenamiento;
+    }
+
+    /**
+    * Get subdirectorios
+    *
+    * @return \AppBundle\Entity\Directorio
+    */
+    public function getSubdirectorios()
+    {
+        return $this->subdirectorios;
+    }
+
+    /**
+     * Set idespacioalmacenmiento
+     *
+     * @param \AppBundle\Entity\Directorio $iddirectorio
+     * @return Espacioalmacenamiento
+     */
+    public function addSubdirectorio(\AppBundle\Entity\Directorio $iddirectorio = null)
+    {
+        $this->subdirectorios[] = $iddirectorio;
+    }
+
+    /**
+    * Get archivos
+    *
+    * @return \AppBundle\Entity\Archivo
+    */
+    public function getArchivos()
+    {
+        return $this->archivos;
+    }
+
+    /**
+     * Set idespacioalmacenmiento
+     *
+     * @param \AppBundle\Entity\Archivos $archivo
+     * @return Directorio
+     */
+    public function addArchivo(\AppBundle\Entity\Archivo $archivo = null)
+    {
+        $this->archivos[] = $archivo;
+    }    
 
     /**
      * Get id
@@ -118,95 +194,27 @@ class Directorio
     }
 
     /**
-     * Set parentid
+     * Set parent
      *
-     * @param \AppBundle\Entity\Directorio $parentid
+     * @param \AppBundle\Entity\Directorio $parent
      * @return Directorio
      */
-    public function setParentid(\AppBundle\Entity\Directorio $parentid = null)
+    public function setParent(\AppBundle\Entity\Directorio $parent = null)
     {
-        $this->parentid = $parentid;
+        $this->parent = $parent;
 
         return $this;
     }
 
     /**
-     * Get parentid
+     * Get parent
      *
      * @return \AppBundle\Entity\Directorio 
      */
-    public function getParentid()
+    public function getParent()
     {
-        return $this->parentid;
+        return $this->parent;
     }
 
-    /**
-     * Add idespacioalmacenamientohasdirectorio
-     *
-     * @param \AppBundle\Entity\Espacioalmacenamiento $idespacioalmacenamientohasdirectorio
-     * @return Directorio
-     */
-    public function addIdespacioalmacenamientohasdirectorio(\AppBundle\Entity\Espacioalmacenamiento $idespacioalmacenamientohasdirectorio)
-    {
-        $this->idespacioalmacenamientohasdirectorio[] = $idespacioalmacenamientohasdirectorio;
 
-        return $this;
-    }
-
-    /**
-     * Remove idespacioalmacenamientohasdirectorio
-     *
-     * @param \AppBundle\Entity\Espacioalmacenamiento $idespacioalmacenamientohasdirectorio
-     */
-    public function removeIdespacioalmacenamientohasdirectorio(\AppBundle\Entity\Espacioalmacenamiento $idespacioalmacenamientohasdirectorio)
-    {
-        $this->idespacioalmacenamientohasdirectorio->removeElement($idespacioalmacenamientohasdirectorio);
-    }
-
-    /**
-     * Get idespacioalmacenamientohasdirectorio
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIdespacioalmacenamientohasdirectorio()
-    {
-        return $this->idespacioalmacenamientohasdirectorio;
-    }
-
-    public function __toString()
-    {
-        return strval($this->id);
-    }
-
-    /**
-    * Metodos para subir ficheros a un directorio
-    *
-    */
-    public function getAbsolutePath()
-    {
-        return null === $this->path
-            ? null
-            : $this->getUploadRootDir().'/'.$this->path;
-    }
-
-    public function getWebPath()
-    {
-        return null === $this->path
-            ? null
-            : $this->getUploadDir().'/'.$this->path;
-    }
-
-    protected function getUploadRootDir()
-    {
-        // the absolute directory path where uploaded
-        // documents should be saved
-        return __DIR__.'/../../../../web/'.$this->getUploadDir();
-    }
-
-    protected function getUploadDir()
-    {
-        // get rid of the __DIR__ so it doesn't screw up
-        // when displaying uploaded doc/image in the view.
-        return 'uploads/documents';
-    }
 }

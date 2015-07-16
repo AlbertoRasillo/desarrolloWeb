@@ -49,6 +49,35 @@ class Usuario
      */
     private $correo;
 
+    /**
+     * @var \AppBundle\Entity\Espacioalmacenamiento
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Espacioalmacenamiento", mappedBy="user")
+     */
+    protected $espacio;
+
+     /**
+     * Get espacio
+     *
+     * @return \AppBundle\Entity\Espacioalmacenamiento 
+     */
+    public function getEspacioalmacenamiento()
+    {
+        return $this->espacio;
+    }
+
+    /**
+     * Set espacio
+     *
+     * @param \AppBundle\Entity\Espacioalmacenamiento $espacio
+     * @return Usuario
+     */
+    public function setEspacioalmacenamiento(\AppBundle\Entity\Espacioalmacenamiento $espacio = null)
+    {
+        $this->espacio = $espacio;
+
+        return $this;
+    }
 
 
     /**

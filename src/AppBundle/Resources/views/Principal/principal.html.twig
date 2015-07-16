@@ -2,7 +2,7 @@
 {% extends '::base1.html.twig' %}
 
 {% block body -%}
-    <h1>Archivos y directorios</h1>
+    <h1>Almacen Archivos y Directorios</h1>
 
     <div id="contenedor">
     <header id="cabecera_pri">
@@ -22,20 +22,19 @@
 
         </form>
         <a href="{{ path('upload_file')}}"><img id="anadir" src="img/anadir.png">Añadir Archivo</a>
-        <a href="{{ path('directorio_new')}}"><img id="anadir" src="img/anadir.png">Añadir Directorio</a>
+        <a href="{{ path('subir_dir')}}"><img id="anadir" src="img/anadir.png">Añadir Directorio</a>
         <a href="{{ path('salir')}}" id ="salir">Salir</a>
-        {% for entity in entities %}
+        {% for entity in archivos %}
             <tr>
                 <td>{{ entity.nombre }}</td>
-                <td>{{ entity.path }}</td>
-                <td><a href="{{ path('archivo_edit', { 'id': entity.id }) }}">Editar / </a><a href="{{ path('archivo_eliminar', { 'id': entity.id }) }}">Eliminar / </a><a href="{{ path('archivo_descarga', { 'id': entity.nombre }) }}">Descargar</a></td>
+                <td>{#COMENTADO<a href="{{ path('archivo_edit', { 'id': entity.id }) }}">#}Editar / </a><a href="{{ path('archivo_eliminar', { 'id': entity.id }) }}">Eliminar / </a><a href="{{ path('archivo_descarga', { 'id': entity.nombre }) }}">Descargar</a></td>
             </tr>
         {% endfor %}
-        {% for entity in entities1 %}
+        {% for entity in subdirectorios %}
             <tr>
                 <td><a href="{{ path('principal', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
-                <td>{{ entity.path}}</td>
-                <td><a href="{{ path('directorio_edit', { 'id': entity.id }) }}">Editar / </a><a href="{{ path('directorio_eliminar', { 'id': entity.id }) }}">Eliminar</a></a></td>
+                <td>{{ entity.path }}</td>
+                <td>{#<a href="{{ path('directorio_edit', { 'id': entity.id }) }}">#}Editar / </a><a href="{{ path('directorio_eliminar', { 'id': entity.id }) }}">Eliminar</a></a></td>
             </tr>
         {% endfor %}
             <!--Fila utilizada en el caso de realizar una busqueda

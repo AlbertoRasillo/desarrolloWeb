@@ -28,10 +28,41 @@ class PrincipalController extends Controller
 
     public function indexAction($id)
     {
-    $session = $this->get('Session');
-    $us=$session->get('usuario');
-    if($us){
-         if($id==""){
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->get('Session');
+        $us=$session->get('usuario');
+        // $us = $em->merge($us);
+        if($us){
+            $directorioActual = null;
+            if( isset($id) && $id!='' ) {
+                $directorioActual = $em->getRepository('AppBundle:Directorio')->find($id);
+            }
+            else {
+                
+                $DQL = "select d from AppBundle:Directorio d join d.espacioalmacenamiento e join e.user u where u.id = '" .$us->getId() . "' and d.path='/'";
+                $directorioActual = $em->createQuery($DQL)->getSingleResult();
+                
+                /*
+                $espacio = $us->getEspacioalmacenamiento()->getDirectorios();
+                print_r($espacio); exit;
+                $directorioActual = $espacio->getRootDir();
+                */
+            }
+            // Obtener subdirectorios
+            $subdirectorios = $directorioActual->getSubdirectorios();
+            $ficheros = $directorioActual->getArchivos();
+            return array(
+                    'subdirectorios' => $subdirectorios,
+                    'archivos' => $ficheros
+            );  
+        }
+        else {
+            return $this->redirect($this->generateUrl('acceso_login'));
+        }
+    }     
+
+        /*
+        if($id==""){
            $em = $this->getDoctrine()->getManager();
 
             $qb = $em->createQueryBuilder()
@@ -78,6 +109,6 @@ class PrincipalController extends Controller
     }
     else
         return $this->redirect($this->generateUrl('acceso_login'));
-    }
+    }*/
 
 }

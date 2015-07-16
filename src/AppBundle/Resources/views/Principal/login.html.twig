@@ -1,9 +1,10 @@
-{% extends '::base.html.twig' %}
+{% extends '::base2.html.twig' %}
 
 {% block body %}
 <form action="" method="post">
 <div>Usuario</div> <div><input type='text' name='nombre'></div>
 <div>Password</div> <div><input type='password' name='password'></div>
 <div><input type="submit" value="Acceder"></div>
+<div><a href="{{ path('reg_usu')}}">Crear nueva cuenta</a></div>
 </form>
 {% endblock %}

@@ -144,17 +144,6 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                 }
                 not_archivo:
 
-                // archivo_create
-                if ($pathinfo === '/archivo/') {
-                    if ($this->context->getMethod() != 'POST') {
-                        $allow[] = 'POST';
-                        goto not_archivo_create;
-                    }
-
-                    return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::createAction',  '_route' => 'archivo_create',);
-                }
-                not_archivo_create:
-
                 if (0 === strpos($pathinfo, '/archivo/upload')) {
                     // upload_file
                     if ($pathinfo === '/archivo/upload') {
@@ -180,17 +169,6 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
                 }
 
-                // archivo_new
-                if ($pathinfo === '/archivo/new') {
-                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                        $allow = array_merge($allow, array('GET', 'HEAD'));
-                        goto not_archivo_new;
-                    }
-
-                    return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::newAction',  '_route' => 'archivo_new',);
-                }
-                not_archivo_new:
-
                 // archivo_eliminar
                 if (0 === strpos($pathinfo, '/archivo/eliminar') && preg_match('#^/archivo/eliminar/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
                     if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
@@ -201,50 +179,6 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                     return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_eliminar')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::eliminarArchivoAction',));
                 }
                 not_archivo_eliminar:
-
-                // archivo_show
-                if (preg_match('#^/archivo/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                        $allow = array_merge($allow, array('GET', 'HEAD'));
-                        goto not_archivo_show;
-                    }
-
-                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_show')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::showAction',));
-                }
-                not_archivo_show:
-
-                // archivo_edit
-                if (preg_match('#^/archivo/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
-                    if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                        $allow = array_merge($allow, array('GET', 'HEAD'));
-                        goto not_archivo_edit;
-                    }
-
-                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_edit')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::editAction',));
-                }
-                not_archivo_edit:
-
-                // archivo_update
-                if (preg_match('#^/archivo/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                    if ($this->context->getMethod() != 'PUT') {
-                        $allow[] = 'PUT';
-                        goto not_archivo_update;
-                    }
-
-                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_update')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::updateAction',));
-                }
-                not_archivo_update:
-
-                // archivo_delete
-                if (preg_match('#^/archivo/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                    if ($this->context->getMethod() != 'DELETE') {
-                        $allow[] = 'DELETE';
-                        goto not_archivo_delete;
-                    }
-
-                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'archivo_delete')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::deleteAction',));
-                }
-                not_archivo_delete:
 
                 // archivo_descarga
                 if (0 === strpos($pathinfo, '/archivo/descarga') && preg_match('#^/archivo/descarga/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
@@ -267,86 +201,27 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         if (0 === strpos($pathinfo, '/directorio')) {
-            // directorio
-            if (rtrim($pathinfo, '/') === '/directorio') {
+            // subir_dir
+            if ($pathinfo === '/directorio/subirdir') {
                 if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
                     $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_directorio;
+                    goto not_subir_dir;
                 }
 
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'directorio');
-                }
-
-                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::indexAction',  '_route' => 'directorio',);
+                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::uploadDirecAction',  '_route' => 'subir_dir',);
             }
-            not_directorio:
+            not_subir_dir:
 
-            // directorio_create
-            if ($pathinfo === '/directorio/') {
+            // do_subir_dir
+            if ($pathinfo === '/directorio/dosubirdir') {
                 if ($this->context->getMethod() != 'POST') {
                     $allow[] = 'POST';
-                    goto not_directorio_create;
+                    goto not_do_subir_dir;
                 }
 
-                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::createAction',  '_route' => 'directorio_create',);
+                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::doSubirDirAction',  '_route' => 'do_subir_dir',);
             }
-            not_directorio_create:
-
-            // directorio_new
-            if ($pathinfo === '/directorio/new') {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_directorio_new;
-                }
-
-                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::newAction',  '_route' => 'directorio_new',);
-            }
-            not_directorio_new:
-
-            // directorio_show
-            if (preg_match('#^/directorio/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_directorio_show;
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'directorio_show')), array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::showAction',));
-            }
-            not_directorio_show:
-
-            // directorio_edit
-            if (preg_match('#^/directorio/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_directorio_edit;
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'directorio_edit')), array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::editAction',));
-            }
-            not_directorio_edit:
-
-            // directorio_update
-            if (preg_match('#^/directorio/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if ($this->context->getMethod() != 'PUT') {
-                    $allow[] = 'PUT';
-                    goto not_directorio_update;
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'directorio_update')), array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::updateAction',));
-            }
-            not_directorio_update:
-
-            // directorio_delete
-            if (preg_match('#^/directorio/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if ($this->context->getMethod() != 'DELETE') {
-                    $allow[] = 'DELETE';
-                    goto not_directorio_delete;
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'directorio_delete')), array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::deleteAction',));
-            }
-            not_directorio_delete:
+            not_do_subir_dir:
 
             // directorio_eliminar
             if (0 === strpos($pathinfo, '/directorio/eliminar') && preg_match('#^/directorio/eliminar/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
@@ -359,113 +234,18 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
             not_directorio_eliminar:
 
-            // subir_dir
-            if ($pathinfo === '/directorio/subirdir') {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_subir_dir;
-                }
-
-                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::uploadDirecAction',  '_route' => 'subir_dir',);
-            }
-            not_subir_dir:
-
-            // do_dubir_dir
-            if ($pathinfo === '/directorio/dosubirdir') {
-                if ($this->context->getMethod() != 'POST') {
-                    $allow[] = 'POST';
-                    goto not_do_dubir_dir;
-                }
-
-                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::doSubirDirAction',  '_route' => 'do_dubir_dir',);
-            }
-            not_do_dubir_dir:
-
         }
 
-        if (0 === strpos($pathinfo, '/espacioalmacenamiento')) {
-            // espacioalmacenamiento
-            if (rtrim($pathinfo, '/') === '/espacioalmacenamiento') {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_espacioalmacenamiento;
-                }
-
-                if (substr($pathinfo, -1) !== '/') {
-                    return $this->redirect($pathinfo.'/', 'espacioalmacenamiento');
-                }
-
-                return array (  '_controller' => 'AppBundle\\Controller\\EspacioalmacenamientoController::indexAction',  '_route' => 'espacioalmacenamiento',);
+        // do_regis_espacio
+        if ($pathinfo === '/espacioalmacenamiento/doregisusuario') {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_do_regis_espacio;
             }
-            not_espacioalmacenamiento:
 
-            // espacioalmacenamiento_create
-            if ($pathinfo === '/espacioalmacenamiento/') {
-                if ($this->context->getMethod() != 'POST') {
-                    $allow[] = 'POST';
-                    goto not_espacioalmacenamiento_create;
-                }
-
-                return array (  '_controller' => 'AppBundle\\Controller\\EspacioalmacenamientoController::createAction',  '_route' => 'espacioalmacenamiento_create',);
-            }
-            not_espacioalmacenamiento_create:
-
-            // espacioalmacenamiento_new
-            if ($pathinfo === '/espacioalmacenamiento/new') {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_espacioalmacenamiento_new;
-                }
-
-                return array (  '_controller' => 'AppBundle\\Controller\\EspacioalmacenamientoController::newAction',  '_route' => 'espacioalmacenamiento_new',);
-            }
-            not_espacioalmacenamiento_new:
-
-            // espacioalmacenamiento_show
-            if (preg_match('#^/espacioalmacenamiento/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_espacioalmacenamiento_show;
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'espacioalmacenamiento_show')), array (  '_controller' => 'AppBundle\\Controller\\EspacioalmacenamientoController::showAction',));
-            }
-            not_espacioalmacenamiento_show:
-
-            // espacioalmacenamiento_edit
-            if (preg_match('#^/espacioalmacenamiento/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
-                    goto not_espacioalmacenamiento_edit;
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'espacioalmacenamiento_edit')), array (  '_controller' => 'AppBundle\\Controller\\EspacioalmacenamientoController::editAction',));
-            }
-            not_espacioalmacenamiento_edit:
-
-            // espacioalmacenamiento_update
-            if (preg_match('#^/espacioalmacenamiento/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if ($this->context->getMethod() != 'PUT') {
-                    $allow[] = 'PUT';
-                    goto not_espacioalmacenamiento_update;
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'espacioalmacenamiento_update')), array (  '_controller' => 'AppBundle\\Controller\\EspacioalmacenamientoController::updateAction',));
-            }
-            not_espacioalmacenamiento_update:
-
-            // espacioalmacenamiento_delete
-            if (preg_match('#^/espacioalmacenamiento/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                if ($this->context->getMethod() != 'DELETE') {
-                    $allow[] = 'DELETE';
-                    goto not_espacioalmacenamiento_delete;
-                }
-
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'espacioalmacenamiento_delete')), array (  '_controller' => 'AppBundle\\Controller\\EspacioalmacenamientoController::deleteAction',));
-            }
-            not_espacioalmacenamiento_delete:
-
+            return array (  '_controller' => 'AppBundle\\Controller\\EspacioalmacenamientoController::doRegUserAction',  '_route' => 'do_regis_espacio',);
         }
+        not_do_regis_espacio:
 
         if (0 === strpos($pathinfo, '/principal')) {
             // principal
@@ -526,6 +306,28 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             if ($pathinfo === '/usuario/salir') {
                 return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::deleteSession',  '_route' => 'salir',);
             }
+
+            // reg_usu
+            if ($pathinfo === '/usuario/regisusuario') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_reg_usu;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::regUserAction',  '_route' => 'reg_usu',);
+            }
+            not_reg_usu:
+
+            // do_regis_usu
+            if ($pathinfo === '/usuario/doregisusuario') {
+                if ($this->context->getMethod() != 'POST') {
+                    $allow[] = 'POST';
+                    goto not_do_regis_usu;
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\UsuarioController::doRegUserAction',  '_route' => 'do_regis_usu',);
+            }
+            not_do_regis_usu:
 
         }
 

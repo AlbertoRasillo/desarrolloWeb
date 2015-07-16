@@ -1,1 +1,1 @@
-{ parameters: { database_host: 127.0.0.1, database_port: null, database_name: desarrolloWeb, database_user: root, database_password: null, mailer_transport: smtp, mailer_host: 127.0.0.1, mailer_user: null, mailer_password: null, secret: 0152fedf0ad3b76f3ae40c2ea8ef0a3677c10d5d } }
+{ parameters: { database_host: 127.0.0.1, database_port: null, database_name: desarrolloWeb2, database_user: root, database_password: null, mailer_transport: smtp, mailer_host: 127.0.0.1, mailer_user: null, mailer_password: null, secret: 0152fedf0ad3b76f3ae40c2ea8ef0a3677c10d5d } }

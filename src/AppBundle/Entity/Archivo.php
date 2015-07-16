@@ -1,7 +1,5 @@
 <?php
-
 namespace AppBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,53 +19,43 @@ class Archivo
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
     /**
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=45, nullable=true)
      */
     private $nombre;
-
     /**
      * @var string
      *
      * @ORM\Column(name="tipo", type="string", length=45, nullable=true)
      */
     private $tipo;
-
     /**
      * @var string
      *
      * @ORM\Column(name="hash", type="string", length=45, nullable=true)
      */
     private $hash;
-
     /**
      * @var string
      *
      * @ORM\Column(name="mimeType", type="string", length=45, nullable=true)
      */
     private $mimetype;
-
     /**
      * @var float
      *
      * @ORM\Column(name="tamano", type="float", precision=10, scale=0, nullable=true)
      */
     private $tamano;
-
     /**
      * @var \AppBundle\Entity\Directorio
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Directorio")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idDirectorio", referencedColumnName="id")
-     * })
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Directorio", inversedBy="archivos")
+     * @ORM\JoinColumn(name="idDirectorio", referencedColumnName="id")
      */
-    private $iddirectorio;
-
-
+    private $directorio;
 
     /**
      * Get id
@@ -78,7 +66,6 @@ class Archivo
     {
         return $this->id;
     }
-
     /**
      * Set nombre
      *
@@ -88,10 +75,8 @@ class Archivo
     public function setNombre($nombre)
     {
         $this->nombre = $nombre;
-
         return $this;
     }
-
     /**
      * Get nombre
      *
@@ -101,7 +86,6 @@ class Archivo
     {
         return $this->nombre;
     }
-
     /**
      * Set tipo
      *
@@ -111,10 +95,8 @@ class Archivo
     public function setTipo($tipo)
     {
         $this->tipo = $tipo;
-
         return $this;
     }
-
     /**
      * Get tipo
      *
@@ -124,7 +106,6 @@ class Archivo
     {
         return $this->tipo;
     }
-
     /**
      * Set hash
      *
@@ -134,10 +115,8 @@ class Archivo
     public function setHash($hash)
     {
         $this->hash = $hash;
-
         return $this;
     }
-
     /**
      * Get hash
      *
@@ -147,7 +126,6 @@ class Archivo
     {
         return $this->hash;
     }
-
     /**
      * Set mimetype
      *
@@ -157,10 +135,8 @@ class Archivo
     public function setMimetype($mimetype)
     {
         $this->mimetype = $mimetype;
-
         return $this;
     }
-
     /**
      * Get mimetype
      *
@@ -170,7 +146,6 @@ class Archivo
     {
         return $this->mimetype;
     }
-
     /**
      * Set tamano
      *
@@ -180,10 +155,8 @@ class Archivo
     public function setTamano($tamano)
     {
         $this->tamano = $tamano;
-
         return $this;
     }
-
     /**
      * Get tamano
      *
@@ -193,35 +166,30 @@ class Archivo
     {
         return $this->tamano;
     }
-
     /**
      * Set iddirectorio
      *
      * @param \AppBundle\Entity\Directorio $iddirectorio
      * @return Archivo
      */
-    public function setIddirectorio(\AppBundle\Entity\Directorio $iddirectorio = null)
+    public function setDirectorio(\AppBundle\Entity\Directorio $directorio = null)
     {
-        $this->iddirectorio = $iddirectorio;
-
+        $this->directorio = $directorio;
         return $this;
     }
-
     /**
      * Get iddirectorio
      *
      * @return \AppBundle\Entity\Directorio 
      */
-    public function getIddirectorio()
+    public function getDirectorio()
     {
-        return $this->iddirectorio;
+        return $this->directorio;
     }
-
     /**
      * @Assert\File(maxSize="6000000")
      */
     private $file;
-
     /**
      * Sets file.
      *
@@ -231,7 +199,6 @@ class Archivo
     {
         $this->file = $file;
     }
-
     /**
      * Get file.
      *
@@ -241,5 +208,4 @@ class Archivo
     {
         return $this->file;
     }
-
 }
