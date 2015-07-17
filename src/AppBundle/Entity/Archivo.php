@@ -169,7 +169,7 @@ class Archivo
     /**
      * Set iddirectorio
      *
-     * @param \AppBundle\Entity\Directorio $iddirectorio
+     * @param \AppBundle\Entity\Directorio $directorio
      * @return Archivo
      */
     public function setDirectorio(\AppBundle\Entity\Directorio $directorio = null)

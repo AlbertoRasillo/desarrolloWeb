@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Archivo;
+use AppBundle\Entity\Directorio;
 use AppBundle\Form\ArchivoType;
 use AppBundle\Form\UploadFileType;
 
@@ -49,18 +50,19 @@ class ArchivoController extends Controller
     /**
      * Displays a form to create a new Archivo entity.
      *
-     * @Route("/upload", name="upload_file")
+     * @Route("/upload/{id}", name="upload_file")
      * @Method("GET")
      * @Template("AppBundle:Archivo:upload.html.twig")
      */
-    public function uploadAction()
+    public function uploadAction($id)
     {
         $form = $this->createForm(new UploadFileType(), null, array(
             'action' => $this->generateUrl('do_upload_file'),
             'method' => 'POST',
         ));
         $form->add('submit', 'submit', array('label' => 'Subir'));
-
+        $form->add('id','hidden');
+        $form->get('id')->setData($id);
         return array(
             'form'   => $form->createView(),
         );
@@ -76,13 +78,16 @@ class ArchivoController extends Controller
     public function doUploadAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
+        
         $form = $this->createForm(new UploadFileType(), null);
         $form->handlerequest($request);
         $data = $form->getData();
-        $uploadedFile = $data['file'];
 
+        //print_r($data);exit;
+        $uploadedFile = $data['file'];
+        $iddirec = $data['id']; 
         $archivo = new Archivo();
+        //print_r($archivo);exit;
         $archivo->setNombre($uploadedFile->getClientOriginalName());
         $archivo->setTipo($uploadedFile->guessClientExtension());  
         $archivo->setMimetype($uploadedFile->getClientMimeType());
@@ -90,19 +95,31 @@ class ArchivoController extends Controller
 
         $hash = md5_file($uploadedFile->getRealPath());
         $archivo->setHash($hash);
-
+        $directorio = $em->getReference('AppBundle\Entity\Directorio', $iddirec);
+        /*
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder()
+                     ->select('d.id')
+                     ->from('AppBundle:Directorio', 'd')
+                     ->where("d.id = '" .$iddirec. "'")
+            ;
+        $directorio = $qb->getQuery()->getSingleResult();*/
+        //print_r($directorio);exit;
+        //print_r($dir);exit;
         // No olvides moverlo al directorio donde se almacenen. En este caso te lo dejo en /tmp
         $uploadedFile->move("/var/www/symfony/web/upload_files",$uploadedFile->getClientOriginalName());
-
+        //print_r($directorio);exit;
         // Y las relaciones
-        $iddirectorio = ( $request->query->has('id') ? $request->query->get('id') : 0 );
-        if( $iddirectorio>0 ) {
-          $directorio = $em->getRepository('AppBundle:Directorio')->find($iddirectorio);
+        //$iddirectorio = ( $request->query->has('id') ? $request->query->get('id') : 0 );
+        /*
+        if( $iddirec>0 ) {
+          $directorio = $em->getRepository('AppBundle:Directorio:id')->find($iddirec);
         }
         else {  // Directorio raiz
-          $directorio = $em->getRepository('AppBundle:Directorio')->findOneBy(array('path'=>'/'));
+          $directorio = $em->getRepository('AppBundle:Directorio:id')->findOneBy(array('path'=>'/'));
         }
-        $archivo->setIddirectorio($directorio);
+        */
+        $archivo->setDirectorio($directorio);
 
         $em->persist($archivo);
         $em->flush();

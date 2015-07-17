@@ -30,7 +30,7 @@ class DirectorioController extends Controller
     {
         $form = $this->createForm(new SubirDirecType(), null, array(
             'action' => $this->generateUrl('do_subir_dir'),
-            'method' => 'POST',
+            'method' => 'GET',
         ));
         $form->add('submit', 'submit', array('label' => 'Crear'));
 
@@ -42,22 +42,26 @@ class DirectorioController extends Controller
      * Guarda el directorio
      *
      * @Route("/dosubirdir", name="do_subir_dir")
-     * @Method("POST")
+     * @Method("GET")
      */
     public function doSubirDirAction(Request $request)
     {
+        $session = $this->get('Session');
+        $us=$session->get('usuario');
+
         $em = $this->getDoctrine()->getManager();
-        $uri = $request->getUri();
         $form = $this->createForm(new SubirDirecType(), null);
         $form->handlerequest($request);
         $data = $form->getData();
         $nombre = $data['nombre'];
-        $session = $this->get('Session');
-        $idEspacio = $session->get('idEspacio');
+        echo $nombre;exit;
+        $DQL = "select e from AppBundle:Espacioalmacenamiento e join e.user u where u.id = '" .$us->getId() . "'";
+        $idEspacio = $em->createQuery($DQL)->getSingleResult();
 
         $directorio = new Directorio();
         $directorio->setNombre($nombre);
 
+        $directorio->setEspacioalmacenamiento($idEspacio);
         $em->persist($directorio);
         $em->flush();
 

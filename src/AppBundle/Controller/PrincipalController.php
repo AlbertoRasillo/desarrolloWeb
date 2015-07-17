@@ -33,20 +33,22 @@ class PrincipalController extends Controller
         $us=$session->get('usuario');
         // $us = $em->merge($us);
         if($us){
+            /*
             $directorioActual = null;
             if( isset($id) && $id!='' ) {
                 $directorioActual = $em->getRepository('AppBundle:Directorio')->find($id);
             }
             else {
                 
-                $DQL = "select d from AppBundle:Directorio d join d.espacioalmacenamiento e join e.user u where u.id = '" .$us->getId() . "' and d.path='/'";
+                $DQL = "select d from AppBundle:Directorio d join d.espacioalmacenamiento e 
+                                join e.user u where u.id = '" .$us->getId() . "' and d.path='/'";
                 $directorioActual = $em->createQuery($DQL)->getSingleResult();
                 
-                /*
-                $espacio = $us->getEspacioalmacenamiento()->getDirectorios();
-                print_r($espacio); exit;
-                $directorioActual = $espacio->getRootDir();
-                */
+                
+                //$espacio = $us->getEspacioalmacenamiento()->getDirectorios();
+                //print_r($espacio); exit;
+                //$directorioActual = $espacio->getRootDir();
+                
             }
             // Obtener subdirectorios
             $subdirectorios = $directorioActual->getSubdirectorios();
@@ -59,24 +61,29 @@ class PrincipalController extends Controller
         else {
             return $this->redirect($this->generateUrl('acceso_login'));
         }
-    }     
+    } */    
 
-        /*
+        
         if($id==""){
            $em = $this->getDoctrine()->getManager();
 
             $qb = $em->createQueryBuilder()
-                     ->select('a.nombre','a.id','d.path')
+                     ->select('a.nombre','a.id')
                      ->from('AppBundle:Archivo', 'a')
-                     ->from('AppBundle:Directorio', 'd')
+                     ->join('a.directorio','d')
+                     ->join('d.espacioalmacenamiento', 'e')
+                     ->join('e.user', 'u')
                      ->where("d.path = '/'")
+                     ->andWhere("u.id = '" .$us->getId(). "'")
             ;
             $entities = $qb->getQuery()->getResult();
-            
             $qb1 = $em->createQueryBuilder()
                      ->select('d.nombre', 'd.path', 'd.id')
                      ->from('AppBundle:Directorio', 'd')
+                     ->join('d.espacioalmacenamiento', 'e')
+                     ->join('e.user', 'u')
                      ->where("d.path = '/'")
+                     ->andWhere("u.id = '" .$us->getId(). "'")
             ;
             $entities1 = $qb1->getQuery()->getResult();
         }
@@ -86,9 +93,12 @@ class PrincipalController extends Controller
             $qb = $em->createQueryBuilder()
                      ->select('a.nombre','a.id','d.path')
                      ->from('AppBundle:Archivo', 'a')
-                     ->join('AppBundle:Directorio', 'd')
-                     ->where('a.iddirectorio=:id')
+                     ->join('a.directorio','d')
+                     ->join('d.espacioalmacenamiento', 'e')
+                     ->join('e.user', 'u')
+                     ->where('a.directorio=:id')
                      ->andWhere("d.path != '/'")
+                     ->andWhere("u.id = '" .$us->getId(). "'")
                      ->setParameter('id', $id)
             ;
             $entities = $qb->getQuery()->getResult();
@@ -96,7 +106,10 @@ class PrincipalController extends Controller
             $qb1 = $em->createQueryBuilder()
                      ->select('d.nombre', 'd.path', 'd.id')
                      ->from('AppBundle:Directorio', 'd')
-                     ->where('d.parentid=:id')
+                     ->join('d.espacioalmacenamiento', 'e')
+                     ->join('e.user', 'u')
+                     ->where('d.parent=:id')
+                     ->andWhere("u.id = '" .$us->getId(). "'")
                      ->setParameter('id', $id)
             ;
             $entities1 = $qb1->getQuery()->getResult();
@@ -109,6 +122,6 @@ class PrincipalController extends Controller
     }
     else
         return $this->redirect($this->generateUrl('acceso_login'));
-    }*/
+    }
 
 }

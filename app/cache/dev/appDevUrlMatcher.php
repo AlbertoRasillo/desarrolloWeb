@@ -146,13 +146,13 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
                 if (0 === strpos($pathinfo, '/archivo/upload')) {
                     // upload_file
-                    if ($pathinfo === '/archivo/upload') {
+                    if (preg_match('#^/archivo/upload/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
                         if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
                             $allow = array_merge($allow, array('GET', 'HEAD'));
                             goto not_upload_file;
                         }
 
-                        return array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::uploadAction',  '_route' => 'upload_file',);
+                        return $this->mergeDefaults(array_replace($matches, array('_route' => 'upload_file')), array (  '_controller' => 'AppBundle\\Controller\\ArchivoController::uploadAction',));
                     }
                     not_upload_file:
 
@@ -214,8 +214,8 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
             // do_subir_dir
             if ($pathinfo === '/directorio/dosubirdir') {
-                if ($this->context->getMethod() != 'POST') {
-                    $allow[] = 'POST';
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
                     goto not_do_subir_dir;
                 }
 
