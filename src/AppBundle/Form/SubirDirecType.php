@@ -16,6 +16,7 @@ class SubirDirecType extends AbstractType
     {
         $builder
             ->add('nombre')
+            ->add('id','hidden')
         ;
     }
     

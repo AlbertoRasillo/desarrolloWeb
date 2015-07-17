@@ -31,89 +31,59 @@ class PrincipalController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->get('Session');
         $us=$session->get('usuario');
-        // $us = $em->merge($us);
-        if($us){
-            /*
-            $directorioActual = null;
-            if( isset($id) && $id!='' ) {
-                $directorioActual = $em->getRepository('AppBundle:Directorio')->find($id);
-            }
-            else {
-                
-                $DQL = "select d from AppBundle:Directorio d join d.espacioalmacenamiento e 
-                                join e.user u where u.id = '" .$us->getId() . "' and d.path='/'";
-                $directorioActual = $em->createQuery($DQL)->getSingleResult();
-                
-                
-                //$espacio = $us->getEspacioalmacenamiento()->getDirectorios();
-                //print_r($espacio); exit;
-                //$directorioActual = $espacio->getRootDir();
-                
-            }
-            // Obtener subdirectorios
-            $subdirectorios = $directorioActual->getSubdirectorios();
-            $ficheros = $directorioActual->getArchivos();
-            return array(
-                    'subdirectorios' => $subdirectorios,
-                    'archivos' => $ficheros
-            );  
-        }
-        else {
-            return $this->redirect($this->generateUrl('acceso_login'));
-        }
-    } */    
 
-        
-        if($id==""){
-           $em = $this->getDoctrine()->getManager();
+        if($us){ 
 
-            $qb = $em->createQueryBuilder()
-                     ->select('a.nombre','a.id')
-                     ->from('AppBundle:Archivo', 'a')
-                     ->join('a.directorio','d')
-                     ->join('d.espacioalmacenamiento', 'e')
-                     ->join('e.user', 'u')
-                     ->where("d.path = '/'")
-                     ->andWhere("u.id = '" .$us->getId(). "'")
-            ;
-            $entities = $qb->getQuery()->getResult();
-            $qb1 = $em->createQueryBuilder()
-                     ->select('d.nombre', 'd.path', 'd.id')
-                     ->from('AppBundle:Directorio', 'd')
-                     ->join('d.espacioalmacenamiento', 'e')
-                     ->join('e.user', 'u')
-                     ->where("d.path = '/'")
-                     ->andWhere("u.id = '" .$us->getId(). "'")
-            ;
-            $entities1 = $qb1->getQuery()->getResult();
-        }
-        else{
-            $em = $this->getDoctrine()->getManager();
+            $session->set('iddirecactual',$id);
+            $iddiractu = $session->get('iddirecactual');
+            if($id==""){
+               $em = $this->getDoctrine()->getManager();
 
-            $qb = $em->createQueryBuilder()
-                     ->select('a.nombre','a.id','d.path')
-                     ->from('AppBundle:Archivo', 'a')
-                     ->join('a.directorio','d')
-                     ->join('d.espacioalmacenamiento', 'e')
-                     ->join('e.user', 'u')
-                     ->where('a.directorio=:id')
-                     ->andWhere("d.path != '/'")
-                     ->andWhere("u.id = '" .$us->getId(). "'")
-                     ->setParameter('id', $id)
-            ;
-            $entities = $qb->getQuery()->getResult();
-            
-            $qb1 = $em->createQueryBuilder()
-                     ->select('d.nombre', 'd.path', 'd.id')
-                     ->from('AppBundle:Directorio', 'd')
-                     ->join('d.espacioalmacenamiento', 'e')
-                     ->join('e.user', 'u')
-                     ->where('d.parent=:id')
-                     ->andWhere("u.id = '" .$us->getId(). "'")
-                     ->setParameter('id', $id)
-            ;
-            $entities1 = $qb1->getQuery()->getResult();
+                $qb = $em->createQueryBuilder()
+                         ->select('a.nombre','a.id', 'a.tipo','a.hash','a.tamano')
+                         ->from('AppBundle:Archivo', 'a')
+                         ->join('a.directorio','d')
+                         ->join('d.espacioalmacenamiento', 'e')
+                         ->join('e.user', 'u')
+                         ->where("d.id = '" .$iddiractu. "'")
+                         ->andWhere("u.id = '" .$us->getId(). "'")
+                ;
+                $entities = $qb->getQuery()->getResult();
+                $qb1 = $em->createQueryBuilder()
+                         ->select('d.nombre', 'd.path', 'd.id')
+                         ->from('AppBundle:Directorio', 'd')
+                         ->join('d.espacioalmacenamiento', 'e')
+                         ->join('e.user', 'u')
+                         ->where("d.path = '/'")
+                         ->andWhere("u.id = '" .$us->getId(). "'")
+                ;
+                $entities1 = $qb1->getQuery()->getResult();
             }
+            else{
+                $em = $this->getDoctrine()->getManager();
+
+                $qb = $em->createQueryBuilder()
+                         ->select('a.nombre','a.id','d.path', 'a.tipo','a.hash','a.tamano')
+                         ->from('AppBundle:Archivo', 'a')
+                         ->join('a.directorio','d')
+                         ->join('d.espacioalmacenamiento', 'e')
+                         ->join('e.user', 'u')
+                         ->where("d.id = '" .$iddiractu. "'")
+                         ->andWhere("u.id = '" .$us->getId(). "'")
+                ;
+                $entities = $qb->getQuery()->getResult();
+                
+                $qb1 = $em->createQueryBuilder()
+                         ->select('d.nombre', 'd.path', 'd.id')
+                         ->from('AppBundle:Directorio', 'd')
+                         ->join('d.espacioalmacenamiento', 'e')
+                         ->join('e.user', 'u')
+                         ->where('d.parent=:id')
+                         ->andWhere("u.id = '" .$us->getId(). "'")
+                         ->setParameter('id', $id)
+                ;
+                $entities1 = $qb1->getQuery()->getResult();
+                }
 
             return array(
                 'entities' => $entities,

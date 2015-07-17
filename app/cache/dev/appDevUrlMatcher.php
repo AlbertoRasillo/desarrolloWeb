@@ -214,8 +214,8 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
             // do_subir_dir
             if ($pathinfo === '/directorio/dosubirdir') {
-                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
-                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                if ($this->context->getMethod() != 'POST') {
+                    $allow[] = 'POST';
                     goto not_do_subir_dir;
                 }
 

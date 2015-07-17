@@ -30,9 +30,14 @@ class DirectorioController extends Controller
     {
         $form = $this->createForm(new SubirDirecType(), null, array(
             'action' => $this->generateUrl('do_subir_dir'),
-            'method' => 'GET',
+            'method' => 'POST',
         ));
         $form->add('submit', 'submit', array('label' => 'Crear'));
+        $session = $this->get('Session');
+        $directoactual=$session->get('iddirecactual');
+        if($directoactual!=null){
+            $form->get('id')->setData($directoactual);
+        }
 
         return array(
             'form'   => $form->createView(),
@@ -42,7 +47,7 @@ class DirectorioController extends Controller
      * Guarda el directorio
      *
      * @Route("/dosubirdir", name="do_subir_dir")
-     * @Method("GET")
+     * @Method("POST")
      */
     public function doSubirDirAction(Request $request)
     {
@@ -53,15 +58,24 @@ class DirectorioController extends Controller
         $form = $this->createForm(new SubirDirecType(), null);
         $form->handlerequest($request);
         $data = $form->getData();
+       
         $nombre = $data['nombre'];
-        echo $nombre;exit;
+        $idPar = $data['id'];
         $DQL = "select e from AppBundle:Espacioalmacenamiento e join e.user u where u.id = '" .$us->getId() . "'";
         $idEspacio = $em->createQuery($DQL)->getSingleResult();
+        if($idPar!=null){
+            $idParent = $em->getReference('AppBundle\Entity\Directorio', $idPar);
+        }
 
         $directorio = new Directorio();
-        $directorio->setNombre($nombre);
 
+        $directorio->setNombre($nombre);
         $directorio->setEspacioalmacenamiento($idEspacio);
+        if($idPar!=null){
+            $directorio->setParent($idParent);
+        }
+        else{ $pathdefecto= "/";
+            $directorio->setPath($pathdefecto);}
         $em->persist($directorio);
         $em->flush();
 

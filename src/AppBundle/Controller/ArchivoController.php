@@ -61,7 +61,7 @@ class ArchivoController extends Controller
             'method' => 'POST',
         ));
         $form->add('submit', 'submit', array('label' => 'Subir'));
-        $form->add('id','hidden');
+        //$form->add('id','hidden');
         $form->get('id')->setData($id);
         return array(
             'form'   => $form->createView(),
