@@ -116,7 +116,7 @@ class UsuarioController extends Controller
 
         $em1 = $this->getDoctrine()->getManager();
         $espacioAlmacenamiento = new Espacioalmacenamiento();
-        $espacioAlmacenamiento->setIdlogin($usuario);
+        $espacioAlmacenamiento->setUser($usuario);
         $em1->persist($espacioAlmacenamiento);
         $em1->flush();
 

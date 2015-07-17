@@ -31,7 +31,7 @@ class EspacioalmacenamientoController extends Controller
 
         $em1 = $this->getDoctrine()->getManager();
         $espacioAlmacenamiento = new Espacioalmacenamiento();
-        $espacioAlmacenamiento->setIdlogin();
+        $espacioAlmacenamiento->setUser();
         $em1->persist($espacioAlmacenamiento);
         $em1->flush();
 

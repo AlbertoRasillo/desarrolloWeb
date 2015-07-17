@@ -61,7 +61,7 @@ class ArchivoController extends Controller
             'method' => 'POST',
         ));
         $form->add('submit', 'submit', array('label' => 'Subir'));
-        //$form->add('id','hidden');
+
         $form->get('id')->setData($id);
         return array(
             'form'   => $form->createView(),
@@ -96,29 +96,9 @@ class ArchivoController extends Controller
         $hash = md5_file($uploadedFile->getRealPath());
         $archivo->setHash($hash);
         $directorio = $em->getReference('AppBundle\Entity\Directorio', $iddirec);
-        /*
-        $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder()
-                     ->select('d.id')
-                     ->from('AppBundle:Directorio', 'd')
-                     ->where("d.id = '" .$iddirec. "'")
-            ;
-        $directorio = $qb->getQuery()->getSingleResult();*/
-        //print_r($directorio);exit;
-        //print_r($dir);exit;
-        // No olvides moverlo al directorio donde se almacenen. En este caso te lo dejo en /tmp
+
         $uploadedFile->move("/var/www/symfony/web/upload_files",$uploadedFile->getClientOriginalName());
-        //print_r($directorio);exit;
-        // Y las relaciones
-        //$iddirectorio = ( $request->query->has('id') ? $request->query->get('id') : 0 );
-        /*
-        if( $iddirec>0 ) {
-          $directorio = $em->getRepository('AppBundle:Directorio:id')->find($iddirec);
-        }
-        else {  // Directorio raiz
-          $directorio = $em->getRepository('AppBundle:Directorio:id')->findOneBy(array('path'=>'/'));
-        }
-        */
+
         $archivo->setDirectorio($directorio);
 
         $em->persist($archivo);

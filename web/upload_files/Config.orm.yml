@@ -1,0 +1,20 @@
+AppBundle\Entity\Config:
+    type: entity
+    table: config
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        valor:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+    lifecycleCallbacks: {  }
