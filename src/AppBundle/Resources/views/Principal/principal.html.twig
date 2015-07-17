@@ -2,7 +2,7 @@
 {% extends '::base1.html.twig' %}
 
 {% block body -%}
-    <h1>Almacen Archivos y Directorios</h1>
+    <h1>Almacen Archivos y Directorios</h1> 
 
     <div id="contenedor">
     <header id="cabecera_pri">
@@ -16,7 +16,7 @@
         <tr>
             <th>Archivo</th>
             <th>Ruta</th>
-            <th>Tipo></th>
+            <th>Tipo</th>
             <th>Hash</th>
             <th>Tamaño</th>
             <th>Opciones</th>
@@ -43,7 +43,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{#<a href="{{ path('directorio_edit', { 'id': entity.id }) }}">#}Editar / </a><a href="{{ path('directorio_eliminar', { 'id': entity.id }) }}">Eliminar / </a><a href="{{ path('upload_file', { 'id': entity.id }) }}">Añadir Archivo</a></a></td>
+                <td><a href="{{ path('actualiza_dir', { 'id': entity.id }) }}">Editar / </a><a href="{{ path('directorio_eliminar', { 'id': entity.id }) }}">Eliminar / </a><a href="{{ path('upload_file', { 'id': entity.id }) }}">Añadir Archivo</a></a></td>
             </tr>
         {% endfor %}
             <!--Fila utilizada en el caso de realizar una busqueda

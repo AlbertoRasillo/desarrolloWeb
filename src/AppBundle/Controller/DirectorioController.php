@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Directorio;
 use AppBundle\Form\DirectorioType;
 use AppBundle\Form\SubirDirecType;
+use AppBundle\Form\ActualiDirecType;
 
 /**
  * Directorio controller.
@@ -43,6 +44,36 @@ class DirectorioController extends Controller
             'form'   => $form->createView(),
         );
     }
+
+
+    /**
+     * Muestra formulario para actualizar un directorio.
+     *
+     * @Route("/actualizadir/{id}",defaults={"id" = ""}, name="actualiza_dir")
+     * @Method("GET")
+     * @Template("AppBundle:Directorio:upload.html.twig")
+     */
+    public function updateDirecAction($id)
+    {
+        $session = $this->get('Session');
+        $session->set('idantigua',$id);
+        $form = $this->createForm(new ActualiDirecType(), null, array(
+            'action' => $this->generateUrl('do_actuali_dir'),
+            'method' => 'POST',
+        ));
+        $form->add('submit', 'submit', array('label' => 'Crear'));
+        $idactual=$session->get('idantigua');
+        $form->get('idantigua')->setData($idactual);
+        $directoactual=$session->get('iddirecactual');
+        if($directoactual!=null){
+            $form->get('id')->setData($directoactual);
+        }
+
+        return array(
+            'form'   => $form->createView(),
+        );
+    }
+
     /**
      * Guarda el directorio
      *
@@ -77,6 +108,48 @@ class DirectorioController extends Controller
         else{ $pathdefecto= "/";
             $directorio->setPath($pathdefecto);}
         $em->persist($directorio);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('principal'));
+    }
+
+
+    /**
+     * Guarda el directorio
+     *
+     * @Route("/doactualizadir", name="do_actuali_dir")
+     * @Method("POST")
+     */
+    public function doActualizaDirAction(Request $request)
+    {
+        $session = $this->get('Session');
+        $us=$session->get('usuario');
+
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new ActualiDirecType(), null);
+        $form->handlerequest($request);
+        $data = $form->getData();
+       
+        $nombre = $data['nombre'];
+        $idPar = $data['id'];
+        $idAntigua = $data['idantigua'];
+        $DQL = "select e from AppBundle:Espacioalmacenamiento e join e.user u where u.id = '" .$us->getId() . "'";
+        $idEspacio = $em->createQuery($DQL)->getSingleResult();
+        if($idPar!=null){
+            $idParent = $em->getReference('AppBundle\Entity\Directorio', $idPar);
+        }
+
+        $directorio = new Directorio();
+
+        $directorio->setNombre($nombre);
+        $directorio->setId($idAntigua);
+        $directorio->setEspacioalmacenamiento($idEspacio);
+        if($idPar!=null){
+            $directorio->setParent($idParent);
+        }
+        else{ $pathdefecto= "/";
+            $directorio->setPath($pathdefecto);}
+        $em->merge($directorio);
         $em->flush();
 
         return $this->redirect($this->generateUrl('principal'));

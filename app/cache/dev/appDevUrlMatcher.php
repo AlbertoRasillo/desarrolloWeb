@@ -212,16 +212,41 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
             not_subir_dir:
 
-            // do_subir_dir
-            if ($pathinfo === '/directorio/dosubirdir') {
-                if ($this->context->getMethod() != 'POST') {
-                    $allow[] = 'POST';
-                    goto not_do_subir_dir;
+            // actualiza_dir
+            if (0 === strpos($pathinfo, '/directorio/actualizadir') && preg_match('#^/directorio/actualizadir(?:/(?P<id>[^/]++))?$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_actualiza_dir;
                 }
 
-                return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::doSubirDirAction',  '_route' => 'do_subir_dir',);
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'actualiza_dir')), array (  'id' => '',  '_controller' => 'AppBundle\\Controller\\DirectorioController::updateDirecAction',));
             }
-            not_do_subir_dir:
+            not_actualiza_dir:
+
+            if (0 === strpos($pathinfo, '/directorio/do')) {
+                // do_subir_dir
+                if ($pathinfo === '/directorio/dosubirdir') {
+                    if ($this->context->getMethod() != 'POST') {
+                        $allow[] = 'POST';
+                        goto not_do_subir_dir;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::doSubirDirAction',  '_route' => 'do_subir_dir',);
+                }
+                not_do_subir_dir:
+
+                // do_actuali_dir
+                if ($pathinfo === '/directorio/doactualizadir') {
+                    if ($this->context->getMethod() != 'POST') {
+                        $allow[] = 'POST';
+                        goto not_do_actuali_dir;
+                    }
+
+                    return array (  '_controller' => 'AppBundle\\Controller\\DirectorioController::doActualizaDirAction',  '_route' => 'do_actuali_dir',);
+                }
+                not_do_actuali_dir:
+
+            }
 
             // directorio_eliminar
             if (0 === strpos($pathinfo, '/directorio/eliminar') && preg_match('#^/directorio/eliminar/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
