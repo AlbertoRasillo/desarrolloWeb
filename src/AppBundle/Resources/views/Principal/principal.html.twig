@@ -2,7 +2,7 @@
 {% extends '::base1.html.twig' %}
 
 {% block body -%}
-    <h1>Almacen Archivos y Directorios</h1> 
+    <h1>Espacio Almacenamiento: {{ app.session.get('nombre') |capitalize}}</h1> 
 
     <div id="contenedor">
     <header id="cabecera_pri">

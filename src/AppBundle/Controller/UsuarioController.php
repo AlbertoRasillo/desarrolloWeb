@@ -48,6 +48,7 @@ class UsuarioController extends Controller
     	if( $user ) {
     		$session = $this->get('Session');
     		$session->set('usuario',$user);
+            $session->set('nombre',$nombre);
 
     		return $this->redirect($this->generateUrl('principal'));
     	}
