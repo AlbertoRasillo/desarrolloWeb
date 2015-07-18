@@ -97,7 +97,8 @@ class ArchivoController extends Controller
         $archivo->setHash($hash);
         $directorio = $em->getReference('AppBundle\Entity\Directorio', $iddirec);
 
-        $uploadedFile->move("/var/www/symfony/web/upload_files",$uploadedFile->getClientOriginalName());
+        //$uploadedFile->move("/var/www/symfony/web/upload_files",$uploadedFile->getClientOriginalName());
+        $uploadedFile->move("/var/www/symfony/web/upload_files",$hash);
 
         $archivo->setDirectorio($directorio);
 
