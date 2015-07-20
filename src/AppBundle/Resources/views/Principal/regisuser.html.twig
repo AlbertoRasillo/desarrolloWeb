@@ -1,15 +1,19 @@
 {% extends '::base2.html.twig' %}
 
 {% block body -%}
-    <h1>Registrar Usuario</h1>
+<section id="seccion_pri">
+	<article>
+    	<h1>Registrar Usuario</h1>
 
-    {{ form(form) }}
+		    {{ form(form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('principal') }}">
-            Volver a principal
-        </a>
-    </li>
-</ul>
+		        <ul class="record_actions">
+		    <li>
+		        <a href="{{ path('acceso_login') }}">
+		            Volver a login
+		        </a>
+		    </li>
+		</ul>
+	</article>
+</section>
 {% endblock %}

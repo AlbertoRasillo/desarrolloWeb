@@ -1,15 +1,20 @@
 {% extends '::base2.html.twig' %}
 
 {% block body -%}
-    <h1>Crear Directorio</h1>
+<section id="seccion_pri">
+			<article>
+	 		<h3 align="center">Formulario subir Directorio</h3>
 
-    {{ form(form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('principal') }}">
-            Volver a principal
-        </a>
-    </li>
-</ul>
+		    {{ form(form) }}
+
+		        <ul class="record_actions">
+		    <li>
+		        <a href="{{ path('principal') }}">
+		            Volver a principal
+		        </a>
+		    </li>
+		</ul>
+	</article>
+</section>
 {% endblock %}

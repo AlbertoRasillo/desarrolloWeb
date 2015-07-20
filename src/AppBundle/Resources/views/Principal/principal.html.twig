@@ -23,8 +23,9 @@
         </tr>
         <form>
         </form>
-        {#<a href="{{ path('upload_file')}}"><img id="anadir" src="img/anadir.png">Añadir Archivo</a>#}
-        <a href="{{ path('subir_dir')}}"><img id="anadir" src="img/anadir.png">Añadir Directorio</a>
+        {#<a href="{{ path('upload_file')}}"><img id="anadir" src="{{ asset('images/anadir.png') }}">Añadir Archivo</a>#}
+        <a href="{{ path('principal')}}">HOME </a>
+        <a href="{{ path('subir_dir')}}">{#<img id="anadir" src="{{ asset('images/anadir.png') }}">#}Añadir Directorio</a>
         <a href="{{ path('salir')}}" id ="salir">Salir</a>
         {% for entity in entities %}
             <tr>
@@ -33,7 +34,7 @@
                 <td>{{ entity.tipo }}</td>
                 <td>{{ entity.hash }}</td>
                 <td>{{ entity.tamano }}</td>
-                <td>{#COMENTADO<a href="{{ path('archivo_edit', { 'id': entity.id }) }}">#}Editar / </a><a href="{{ path('archivo_eliminar', { 'id': entity.id }) }}">Eliminar / </a><a href="{{ path('archivo_descarga', { 'id': entity.nombre }) }}">Descargar</a></td>
+                <td>{#COMENTADO<a href="{{ path('archivo_edit', { 'id': entity.id }) }}">#}Editar / </a><a href="{{ path('archivo_eliminar', { 'id': entity.id }) }}">Eliminar / </a><a href="{{ path('archivo_descarga', { 'id': entity.hash }) }}">Descargar</a></td>
             </tr>
         {% endfor %}
         {% for entity in entities1 %}

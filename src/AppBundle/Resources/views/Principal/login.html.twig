@@ -1,10 +1,22 @@
-{% extends '::base2.html.twig' %}
+{% extends '::base3.html.twig' %}
 
 {% block body %}
-<form action="" method="post">
-<div>Usuario</div> <div><input type='text' name='nombre'></div>
-<div>Password</div> <div><input type='password' name='password'></div>
-<div><input type="submit" value="Acceder"></div>
-<div><a href="{{ path('reg_usu')}}">Crear nueva cuenta</a></div>
+<div id="contenedor">
+	<header id="cabecera">
+		<h2>Acceso Gestor Archivos</h2>
+	</header>
+	<nav id="menu">
+		
+	</nav>
+
+<section>	
+	<form action="" method="post">
+	<div>Usuario</div> <div><input type='text' name='nombre'></div>
+	<div>Password</div> <div><input type='password' name='password'></div>
+	<div><input type="submit" value="Acceder"></div>
+	<div><a href="{{ path('reg_usu')}}">Crear nueva cuenta</a></div>
 </form>
+</section>
+	<footer id="pie"></footer>
+</div>
 {% endblock %}
